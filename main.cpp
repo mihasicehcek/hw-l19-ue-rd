@@ -12,47 +12,29 @@ public:
 
 class Sword : public Weapon {
 public:
-    [[nodiscard]] float GetDamage() const override {
-        return 10.f;
-    }
+    [[nodiscard]] float GetDamage() const override;
 
-    [[nodiscard]] std::string GetName() const override {
-        return "Sword";
-    }
+    [[nodiscard]] std::string GetName() const override;
 
-    ~Sword() override {
-        std::cout << "Sword destroyed" << std::endl;
-    }
+    ~Sword() override;
 };
 
 class Staff : public Weapon {
 public:
-    [[nodiscard]] float GetDamage() const override {
-        return 3.f;
-    }
+    [[nodiscard]] float GetDamage() const override;
 
-    [[nodiscard]] std::string GetName() const override {
-        return "Staff";
-    }
+    [[nodiscard]] std::string GetName() const override;
 
-    ~Staff() override {
-        std::cout << "Staff destroyed" << std::endl;
-    }
+    ~Staff() override;
 };
 
 class Dagger : public Weapon {
 public:
-    [[nodiscard]] float GetDamage() const override {
-        return 4.f;
-    }
+    [[nodiscard]] float GetDamage() const override;
 
-    [[nodiscard]] std::string GetName() const override {
-        return "Dagger";
-    }
+    [[nodiscard]] std::string GetName() const override;
 
-    ~Dagger() override {
-        std::cout << "Dagger destroyed" << std::endl;
-    }
+    ~Dagger() override;
 };
 
 class Character {
@@ -60,39 +42,16 @@ class Character {
     Weapon* selectedWeapon = nullptr;
 
 public:
-    void AddWeapon(std::unique_ptr<Weapon> weapon) {
-        const std::string& weaponName = weapon->GetName();
-        auto result = weapons.emplace(weaponName, std::move(weapon));
-        if (result.second) {
-            selectedWeapon = result.first->second.get();
-        }
-    }
+    void AddWeapon(std::unique_ptr<Weapon> weapon);
 
-    [[nodiscard]] Weapon* GetSelectedWeapon() const {
-        return selectedWeapon;
-    }
+    [[nodiscard]] Weapon* GetSelectedWeapon() const;
 
-    void equip(const std::string& weaponName) {
-        auto it = weapons.find(weaponName);
-        if (it != weapons.end()) {
-            selectedWeapon = it->second.get();
-        } else {
-            selectedWeapon = nullptr;
-        }
-    }
+    void equip(const std::string& weaponName);
 
-    void unequip() {
-        selectedWeapon = nullptr;
-    }
+    void unequip();
 };
 
-void printSelectedWeapon(const std::unique_ptr<Character>& character) {
-    if (character->GetSelectedWeapon() == nullptr) {
-        std::cout << "No weapon selected" << std::endl;
-        return;
-    }
-    std::cout << "Selected weapon: " << character->GetSelectedWeapon()->GetName() << std::endl;
-}
+void printSelectedWeapon(const std::unique_ptr<Character>& character);
 
 int main() {
     auto character = std::make_unique<Character>();
@@ -124,4 +83,73 @@ int main() {
     character->unequip();
     printSelectedWeapon(character);
     return 0;
+}
+
+Sword::~Sword() {
+    std::cout << "Sword destroyed" << std::endl;
+}
+
+float Sword::GetDamage() const {
+    return 10.f;
+}
+
+std::string Sword::GetName() const {
+    return "Sword";
+}
+
+Staff::~Staff() {
+    std::cout << "Staff destroyed" << std::endl;
+}
+
+float Staff::GetDamage() const {
+    return 3.f;
+}
+
+std::string Staff::GetName() const {
+    return "Staff";
+}
+
+Dagger::~Dagger() {
+    std::cout << "Dagger destroyed" << std::endl;
+}
+
+float Dagger::GetDamage() const {
+    return 4.f;
+}
+
+std::string Dagger::GetName() const {
+    return "Dagger";
+}
+
+void Character::AddWeapon(std::unique_ptr<Weapon> weapon) {
+    const std::string& weaponName = weapon->GetName();
+    auto result = weapons.emplace(weaponName, std::move(weapon));
+    if (result.second) {
+        selectedWeapon = result.first->second.get();
+    }
+}
+
+Weapon* Character::GetSelectedWeapon() const {
+    return selectedWeapon;
+}
+
+void Character::equip(const std::string& weaponName) {
+    auto it = weapons.find(weaponName);
+    if (it != weapons.end()) {
+        selectedWeapon = it->second.get();
+    } else {
+        selectedWeapon = nullptr;
+    }
+}
+
+void Character::unequip() {
+    selectedWeapon = nullptr;
+}
+
+void printSelectedWeapon(const std::unique_ptr<Character>& character) {
+    if (character->GetSelectedWeapon() == nullptr) {
+        std::cout << "No weapon selected" << std::endl;
+        return;
+    }
+    std::cout << "Selected weapon: " << character->GetSelectedWeapon()->GetName() << std::endl;
 }
